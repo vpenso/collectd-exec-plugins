@@ -42,7 +42,7 @@ while true
       case flag
       when 'r': jobs[:running] += 1
       when 'q': jobs[:queued] += 1
-      when /[sS]/: jobs[:suspended] += 1
+      when 's','S]': jobs[:suspended] += 1
       end
     end
   end
