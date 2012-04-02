@@ -36,7 +36,7 @@ end
 def read_values(lid,port=1)
   data = { :rbytes => 0, :tbytes => 0, :rpkts => 0, :tpkts => 0 }
   # read the perfquery manual for more information
-  command = %Q[/usr/sbin/perfquery -r #{lid} #{port} 0xf000]
+  command = %Q[sudo /usr/sbin/perfquery -r #{lid} #{port} 0xf000]
   # clean all read counters, except of error counts
   `#{command}`.split("\n").each do |line|
     case line
