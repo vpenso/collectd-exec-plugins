@@ -1,7 +1,22 @@
 Description
 ===========
 
-[Collectd][1] plugin to gather active jobs in [GridEngine][2].
+Collection of [Collectd][1] Exec Plug-in.
+
+Installation
+============
+
+Configuration files `*.conf` and `*.db` should be placed to:
+
+    /etc/collectd/collectd.d/
+
+The executable scripts needs to be deployed to:
+
+    /usr/lib/collectd/exec
+
+You may want to replace the suer name to execute the scripts!
+Make sure this uses is allowed to execute all commands used
+by the script (by configuring Sudo).
 
 Copying
 =======

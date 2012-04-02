@@ -1,0 +1,2 @@
+ib_octets     rx:COUNTER:0:U, tx:COUNTER:0:U
+ib_packets    rx:COUNTER:0:U, tx:COUNTER:0:U
