@@ -21,9 +21,8 @@ by the script (by configuring Sudo).
 Copying
 =======
 
-Copyright 2011 Victor Penso  
+Copyright 2012 Victor Penso  
 License [GPLv3][3] (see LICENSE file)
 
 [1]: http://collectd.org/
-[2]: http://gridscheduler.sourceforge.net/
 [3]: http://www.gnu.org/licenses/gpl-3.0.html
