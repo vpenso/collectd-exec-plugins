@@ -23,7 +23,7 @@
 ##----------------------------------------------------------------
 ## Author: Victor Penso
 ## Copyright 2012
-## Version: 0.0.1
+## Version: 0.5.0
 ##----------------------------------------------------------------
 
 
@@ -48,6 +48,30 @@ def read_values(lid,port=1)
       data[:rbytes] = value(line) * 4 # result in octets
     when /^XmtData/ # transmitted bytes
       data[:tbytes] = value(line) * 4 # result in octets
+    when /^SymbolErrors/
+      data[:symerr] = value(line)
+    when /^LinkRecovers/
+      data[:linkrec] = value(line)
+    when /^LinkDowned/
+      data[:linkdown] = value(line)
+    when /^RcvErrors/
+      data[:rerrors] = value(line)
+    when /^RcvRemotePhysErrors/
+      data[:rphyserrors] = value(line)
+    when /^RcvSwRelayErrors/
+      data[:rrelerrors] = value(line)
+    when /^XmtDiscards/
+      data[:xmtd] = value(line)
+    when /^XmtConstraintErrors/
+      data[:xmtcerrors] = value(line)
+    when /^RcvConstraintErrors/
+      data[:rcerrors] = value(line)
+    when /^LinkIntegrityErrors/
+      data[:linkerrors] = value(line)
+    when /^ExcBufOverrunErrors/
+      data[:buferrors] = value(line)
+    when /^VL15Dropped/
+      data[:vdropped] =value(line)
     end
   end
   return data
@@ -71,6 +95,8 @@ end
 hostname = ENV.has_key?('COLLECTD_HOSTNAME') ? ENV['COLLECTD_HOSTNAME'] : 'localhost'
 interval = ENV.has_key?('COLLECTD_INTERVAL') ? ENV['COLLECTD_INTERVAL'].to_i : 60
 
+error_counters = false
+
 # run until we get killed by a mother program 
 while true
   ports.each_pair do |port,lid|
@@ -83,6 +109,18 @@ while true
     # post data to the caller program
     $stdout.puts %Q[PUTVAL #{hostname}/infiniband/ib_octets-port#{port} interval=#{interval} #{time}:#{data[:rbytes]}:#{data[:tbytes]}]
     $stdout.puts %Q[PUTVAL #{hostname}/infiniband/ib_packets-port#{port} interval=#{interval} #{time}:#{data[:rpkts]}:#{data[:tpkts]}]
+    # optionally monitor error counters
+    if error_counters
+      # SymbolErrors, LinkRecovers, LinkDowned, LinkIntegrityErrors
+      link = [data[:symerr],data[:linkrec],data[:linkdown],data[:linkerrors]].join(':')
+      $stdout.puts %Q[PUTVAL #{hostname}/infiniband/ib_linkerror-port#{port} interval=#{interval} #{time}:#{link}]
+      # RcvErrors, RcvRemotePhysErrors, ExcBufOverrunErrors
+      rcv = [data[:rerrors],data[:rphyserrors],data[:buferrors]].join(':')
+      $stdout.puts %Q[PUTVAL #{hostname}/infiniband/ib_rcverror-port#{port} interval=#{interval} #{time}:#{rcv}]
+      # VL15Dropped, XmtDiscards
+      pkg = [data[:vdropped],data[:xmtd]].join(':')
+      $stdout.puts %Q[PUTVAL #{hostname}/infiniband/ib_pkgerror-port#{port} interval=#{interval} #{time}:#{pkg}]
+    end
     # clear output buffer before sleeping
     $stdout.flush
   end
