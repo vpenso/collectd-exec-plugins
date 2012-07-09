@@ -95,7 +95,7 @@ end
 hostname = ENV.has_key?('COLLECTD_HOSTNAME') ? ENV['COLLECTD_HOSTNAME'] : 'localhost'
 interval = ENV.has_key?('COLLECTD_INTERVAL') ? ENV['COLLECTD_INTERVAL'].to_i : 60
 
-error_counters = false
+error_counters = true
 
 # run until we get killed by a mother program 
 while true

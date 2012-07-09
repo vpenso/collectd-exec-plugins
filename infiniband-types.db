@@ -1,2 +1,5 @@
-ib_octets     rx:GAUGE:0:U, tx:GAUGE:0:U
-ib_packets    rx:GAUGE:0:U, tx:GAUGE:0:U
+ib_octets       rx:GAUGE:0:U, tx:GAUGE:0:U
+ib_packets      rx:GAUGE:0:U, tx:GAUGE:0:U
+ib_linkerror    symerr:GAUGE:0:U, linkrec:GAUGE:0:U, linkdown:GAUGE:0:U, linkerr:GAUGE:0:U
+ib_rcverror     rxerr:GAUGE:0:U, rxphyserr:GAUGE:0:U, rxbuferr:GAUGE:0:U
+ib_pkgerror     vdrop:GAUGE:0:U, xmtdisc:GAUGE:0:U
