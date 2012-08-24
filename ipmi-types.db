@@ -1,0 +1,1 @@
+ipmi_temperature       temp:GAUGE:0:U
