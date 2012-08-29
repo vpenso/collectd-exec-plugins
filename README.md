@@ -23,17 +23,38 @@ specification.
 Installation
 ============
 
-Configuration files `*.conf` and `*.db` should be placed to:
+These instructions cover Debian Squeeze, but should be easy
+to adapt to other Linux distributions. 
 
-    /etc/collectd/collectd.d/
+Optional configurations for Collectd plug-ins are automatically 
+read from <tt>/etc/collectd/collectd.d/</tt>, copy `*.conf` and 
+`*.db` into this directory. The executable scripts need to be 
+deployed to <tt>/usr/lib/collectd/exec</tt>. After deployment
+restart the Collectd daemon. Check if the daemon has resumed 
+normal operation by looking to the log-file. 
 
-The executable scripts needs to be deployed to:
+    » /etc/init.d/collectd restart
+    » cat /var/log/collectd.log
+    ...SNIP...
+    [2012-08-29 16:34:37] Initialization complete, entering read-loop.
+    » ls /var/lib/collectd/rrd/$(hostname -f)/ipmi
+    ipmi_temperature.rrd
 
-    /usr/lib/collectd/exec
+If everything works as expected you should find a new RRD file for 
+the values collected by a script. The example above shows where 
+to find a corresponding file for the IPMI temperature script. 
 
-You may want to replace the user name to execute the scripts!
-Make sure this uses is allowed to execute all commands used
-by the script (by configuring Sudo).
+Depending on the script it may be necessary to configure Sudo to
+allow the monitoring user to execute commands limited to root.
+All configuration files inside this repository require a user 
+called "mon" for this purpose.
+
+You can add a file to the <tt>/etc/sudoers.d/</tt> directory to 
+enable "mon" to execute a certain command. The following example 
+illustrates this for the <tt>ipmitool</tt> command: 
+
+    » echo "mon $(hostname -f) = NOPASSWD: /usr/bin/ipmitool" > /etc/sudoers.d/ipmitool
+    » chmod 0440 /etc/sudoers.d/ipmitool
 
 Copying
 =======
