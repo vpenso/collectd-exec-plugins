@@ -1,1 +1,1 @@
-ipmi_temperature       temp:GAUGE:0:U
+ipmi_temperature       temp:GAUGE:0:U, min:GAUGE:0:U, max:GAUGE:0:U

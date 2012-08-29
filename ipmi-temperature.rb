@@ -32,17 +32,16 @@ interval = ENV.has_key?('COLLECTD_INTERVAL') ? ENV['COLLECTD_INTERVAL'].to_i : 6
 
 
 def temperature
-  `ipmitool sensor | grep "System Temp" | cut -d'|' -f2`.strip
+  `sudo ipmitool sensor | grep "System Temp" | cut -d'|' -f2,7,8`.split('|').map { |t| t.strip }
 end
 
 # run until we get killed by a mother program 
 while true
-  ports.each_pair do |port,lid|
-    # post data to the caller program
-    $stdout.puts %Q[PUTVAL #{hostname}/ipmi_temperature interval=#{interval} #{time}:#{temperature}]
-    # clear output buffer before sleeping
-    $stdout.flush
-  end
+  time = `date +%s`.chop
+  # post data to the caller program
+  $stdout.puts %Q[PUTVAL #{hostname}/ipmi/ipmi_temperature interval=#{interval} #{time}:#{temperature.join(':')}]
+  # clear output buffer before sleeping
+  $stdout.flush
   sleep interval
 end
 
